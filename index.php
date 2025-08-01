@@ -204,7 +204,7 @@ function showTime()
 {
   if (isset($_SESSION["conf_time_fon"]) && $_SESSION["conf_time_fon"] != "") {
     $message = $_SESSION["conf_time_fon"];
-    $_SESSION["conf_time_fon"] = ""; // ล้างข้อความหลังจากแสดงแล้ว
+    $_SESSION["conf_time_fon"] = ""; // ล้างข้อความหลังจากแสดงแล้
     return "<p style='font-size: 14px; color: red;font-weight: 600;' >{$message}</p>";
   }
   return "";
