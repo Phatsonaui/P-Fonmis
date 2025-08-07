@@ -200,7 +200,7 @@ function calculateDateDifferenceDetailed($startDate, $endDate = null)
 
                                         switch ($dataGrp12['userProj_status']) {
                                             case '1':
-                                                echo $dataGrp2['name_th'] . " " . $dataGrp2['lname_th'] . " : ผู้จัดทำ<br>";
+                                                echo $dataGrp2['name_th'] . " " . $dataGrp2['lname_th'] . " : ผู้จัดทำโครงการ<br>";
                                                 break;
 
                                             case '2':
