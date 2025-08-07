@@ -469,7 +469,7 @@ https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js
                                 <div class="kpi-card">
                                     <div class="card-body">
                                         <div class="flex-container-rounded">
-                                            <p class="card-text"><i class="bi bi-clock"></i> ไม่ได้ทำการรายงานผล </p>
+                                            <p class="card-text"><i class="bi bi-x-circle"></i> ไม่ได้ทำการรายงานผล </p>
                                             <p class="rounded-full danger-full"></p>
                                         </div>
                                         <h1 class="card-title">
@@ -728,11 +728,63 @@ https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js
 
                     <?php } ?>
 
+
                 </div>
             </div>
         </div>
 
-        <div class="col-md-3 mt-5">
+        <div class="col-md-12 mt-5">
+            <?php
+            $In_re = $In_stu = $In_thum = $no_in = 0;
+
+            $dbIn = new Database('nurse');
+            $dbIn->Table = "proj_list";
+            $dbIn->Where = "where project_Year = '$projyear' AND project_status NOT IN('00','12','16') AND project_id <> '14' AND project_id <> '183'";
+            $userIn = $dbIn->Select();
+            foreach ($userIn as $valuesIn => $dataIn) {
+                if ($dataIn['project_Integration'] == '1') {
+                    $In_stu++;
+                } elseif ($dataIn['project_Integration'] == '2') {
+                    $In_re++;
+                } elseif ($dataIn['project_Integration'] == '3') {
+                    $In_thum++;
+                } else {
+                    $no_in++;
+                }
+            }
+            $sum_In_stu = $In_stu;
+            $sum_In_re = $In_re;
+            $sum_thum = $In_thum;
+            $sum_no = $no_in;
+            ?>
+            <div class="kpi-card">
+                <div class="justify-content-start">
+                    <h2>บูรณาการ</h2>
+                </div>
+                <div class="row">
+                    <div class="content-card">
+                        <div class="kpi-card">
+                            <h5 style="text-align: justify;"><i class="bi bi-mortarboard"></i> การเรียนการสอน</h5>
+                            <h2 class="text-center"><span id="in_stud"><?php echo number_format($sum_In_stu); ?></span> </h2>
+                        </div>
+                        <div class="kpi-card">
+                            <h5 style="text-align: justify;"><i class="bi bi-bar-chart-line"></i> การวิจัย</h5>
+                            <h2 class="text-center"><span id="in_rese"><?php echo number_format($sum_In_re); ?></span> </h2>
+                        </div>
+                        <div class="kpi-card">
+                            <h5 style="text-align: justify;"><i class="bi bi-bank"></i> การทำนุศิลปะและวัฒนธรรม</h5>
+                            <h2 class="text-center"><span id="in_thum"><?php echo number_format($sum_thum); ?></span> </h2>
+                        </div>
+                        <div class="kpi-card">
+                            <h5 style="text-align: justify;"><i class="bi bi-x-circle"></i> ไม่มี</h5>
+                            <h2 class="text-center"><span id="in_no"><?php echo number_format($sum_no); ?></span> </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mt-5 d-none">
             <div class="kpi-card">
                 <div class="justify-content-start">
                     <h2>ROI <i class="text-default" style="font-size: 12px;">= ((รายรับจริง - รายจ่าย) / รายจ่าย) X 100 </i></h2><i class="text-default" style="font-size: 12px;">ตัวเลขนี้ไม่รวมโครงการที่ไม่ได้รายงานผล</i>
