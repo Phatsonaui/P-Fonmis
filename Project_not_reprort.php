@@ -194,7 +194,7 @@ function calculateDateDifferenceDetailed($startDate, $endDate = null)
                                     $dbtitle11->Where = "where front_id='$dataGrp2[title]'";
                                     $usertitle11 = $dbtitle11->Select();
                                     foreach ($usertitle11 as $valuestitle11 => $datatitle11) {
-                                        if ($dataGrp12['userProj_status'] == 2 && $_SESSION['ud_id_MGProject'] == $dataGrp12['ud_id']) {
+                                        if ($dataGrp12['userProj_status'] == 2) {
                                             $manager = 1;
                                         }
 
