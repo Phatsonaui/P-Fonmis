@@ -5,6 +5,7 @@
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
         gap: 10px;
     }
+
     .content-card {
         display: grid;
         grid-template-columns: repeat(4, minmax(150px, 1fr));
@@ -32,16 +33,19 @@
         margin: 0;
     }
 
-    .card-body{
+    .card-body {
         height: 100%;
-        .row{
+
+        .row {
             height: 100%;
-            .d-flex{
+
+            .d-flex {
                 align-items: center;
             }
         }
     }
-    .Header_main_nu{
+
+    .Header_main_nu {
         background: #f8f8f8;
         margin-top: 3rem;
         border-radius: 12px;
@@ -194,13 +198,16 @@
     @media all and (max-width: 572px) {
         .content-card {
             grid-template-columns: repeat(2, minmax(150px, 1fr));
-            .kpi-card{
+
+            .kpi-card {
                 padding: 30px;
             }
         }
+
         .content-card_plan {
             grid-template-columns: repeat(1, minmax(150px, 1fr));
-            .kpi-card{
+
+            .kpi-card {
                 padding: 30px;
             }
         }
@@ -208,13 +215,13 @@
 </style>
 <div class="container-fluid pb-4" style=" color: #000000; background-color:#d8d6d6;">
     <div class="row g-3 mt-2">
-		<nav aria-label="breadcrumb">
-		  <ol class="breadcrumb">
-		    <li class="breadcrumb-item"><a href="Page.php" style="color: #fff;">Home</a></li>
-		    <li class="breadcrumb-item active" id="activet" aria-current="page">การทำนุศิลปะและวัฒนธรรม</li>
-		  </ol>
-		</nav>
-	</div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="Page.php" style="color: #fff;">Home</a></li>
+                <li class="breadcrumb-item active" id="activet" aria-current="page">การทำนุศิลปะและวัฒนธรรม</li>
+            </ol>
+        </nav>
+    </div>
     <div class="row justify-content-center">
         <div class="col-md-12 mt-5">
             <div class="kpi-card">
@@ -232,17 +239,17 @@
 
                         echo '<select class="form-select select-sm" name="year-section" id="year-section">';
                         echo '<option selected>ปีงบประมาณ</option>';
-                            $currentYear = date('Y');
-                            for ($i = 0; $i < 5; $i++) {
-                                $year = $currentYear - $i;
-                                $buddhistYear = $year + 543;
-                                $selected = ($i === 0) ? 'selected' : '';
-                                echo "<option value=\"$year\" $selected>$buddhistYear</option>";
-                            }
+                        $currentYear = date('Y');
+                        for ($i = 0; $i < 5; $i++) {
+                            $year = $currentYear - $i;
+                            $buddhistYear = $year + 543;
+                            $selected = ($i === 0) ? 'selected' : '';
+                            echo "<option value=\"$year\" $selected>$buddhistYear</option>";
+                        }
 
                         echo '</select>';
                         ?>
-                </div>
+                    </div>
                 </div>
                 <h2><strong>โครงการ</strong></h2>
                 <div class="content-card_plan">
@@ -317,9 +324,9 @@
                     </div>
                 </div>
             </div>
-            
-           
-        </div>  
+
+
+        </div>
     </div>
     <div class="Header_main_nu">
         <div class="row">
@@ -329,35 +336,36 @@
 </div>
 <script>
     function animateMoney(element, start, end, duration) {
-            // if (end === 0) return;
+        // if (end === 0) return;
 
-            // กำหนดเวลาให้สั้นลงถ้าค่าน้อย
-            if (end <= 100) {
-                duration = 300; // ปรับให้แสดงเร็วขึ้น
-            }
-
-            var range = end - start;
-            var stepTime = Math.abs(Math.floor(duration / Math.max(range, 1))); // เวลาต่อการนับ
-            var increment = range / (duration / 50); // เพิ่มค่าทีละน้อยตามเวลา
-
-            var current = start;
-            var timer = setInterval(function() {
-                current += increment;
-
-                if (current > end) current = end; // หยุดเมื่อถึง end
-
-                // ตรวจสอบว่าเป็นจำนวนเต็มหรือไม่
-                let displayValue = Number.isInteger(current)
-                    ? current.toLocaleString() // จำนวนเต็ม
-                    : current.toFixed(2).toLocaleString(); // มีทศนิยม 2 ตำแหน่ง
-
-                $(element).text(displayValue);
-
-                if (current >= end) {
-                    clearInterval(timer);
-                }
-            }, stepTime);
+        // กำหนดเวลาให้สั้นลงถ้าค่าน้อย
+        if (end <= 100) {
+            duration = 300; // ปรับให้แสดงเร็วขึ้น
         }
+
+        var range = end - start;
+        var stepTime = Math.abs(Math.floor(duration / Math.max(range, 1))); // เวลาต่อการนับ
+        var increment = range / (duration / 50); // เพิ่มค่าทีละน้อยตามเวลา
+
+        var current = start;
+        var timer = setInterval(function() {
+            current += increment;
+
+            if (current > end) current = end; // หยุดเมื่อถึง end
+
+            // ตรวจสอบว่าเป็นจำนวนเต็มหรือไม่
+            let displayValue = Number.isInteger(current) ?
+                current.toLocaleString() // จำนวนเต็ม
+                :
+                current.toFixed(2).toLocaleString(); // มีทศนิยม 2 ตำแหน่ง
+
+            $(element).text(displayValue);
+
+            if (current >= end) {
+                clearInterval(timer);
+            }
+        }, stepTime);
+    }
 
     var initialYear = new Date().getFullYear().toString();
     fetchData(initialYear);
@@ -373,12 +381,12 @@
 
     function fetchData(year) {
         $.ajax({
-			type: "POST",
-			url: 'config/get_Pro_Thum.php',
-			data: {
-				year: year
-			},
-			success: function(data) {
+            type: "POST",
+            url: 'config/get_Pro_Thum.php',
+            data: {
+                year: year
+            },
+            success: function(data) {
                 animateMoney('#pro_thum', 0, data.project || 0, 3000);
                 animateMoney('#per_thum', 0, data.Percent || 0, 3000);
                 animateMoney('#sum_money', 0, data.sum_money || 0, 3000);
@@ -386,6 +394,9 @@
                 animateMoney('#money_income_real', 0, data.money_income_real || 0, 3000);
                 animateMoney('#sum_group', 0, data.sum_group || 0, 3000);
                 const allProjectIds = data.allProjectIds; // ดึง project_id ของ earn
+                const allProjectStd = data.thumStd;
+                const allProjectRe = data.thumRe;
+                const allProjectAll = data.thumAll;
                 const thumProjectIds = data.thumProjectIds;
 
                 var chartDom = document.getElementById('roomStatusChart');
@@ -399,144 +410,180 @@
                         formatter: '{b}: {c} ({d}%)' // แสดงชื่อ, จำนวน, และอัตราร้อยละใน tooltip
                     },
                     legend: {
-                        top: '5%',
+                        top: '0%',
                         left: 'center',
                         bottom: '10%'
 
                     },
-                    series: [
-                        {
-                            name: 'Access From',
-                            type: 'pie',
-                            radius: ['40%', '70%'],
-                            avoidLabelOverlap: false,
-                            padAngle: 5,
-                            itemStyle: {
-                                borderRadius: 10
-                            },
+                    series: [{
+                        name: 'Access From',
+                        type: 'pie',
+                        radius: ['40%', '70%'],
+                        avoidLabelOverlap: false,
+                        padAngle: 5,
+                        itemStyle: {
+                            borderRadius: 10
+                        },
+                        label: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
                             label: {
-                                show: false,
-                                position: 'center'
-                            },
-                            emphasis: {
-                                label: {
-                                    show: true,
-                                    fontSize: 20,
-                                    fontWeight: 'bold',
-                                    formatter: function(params) {
-                                        return `${params.name}\n${params.percent}%`; 
-                                        // แสดงชื่อและอัตราร้อยละตรงกลาง
-                                    },
-                                    color: '#000' // ปรับสีข้อความให้ชัดเจน
-                                }
-                            },
-                            labelLine: {
-                                show: false
-                            },
-                            data: [
-                                { 
-                                    value: data.project, 
-                                    name: "โครงการ",
-                                    
-                                    itemStyle: {
-                                        color: "#919e8b",
-                                        borderColor: '#000', // สีเส้นขอบ
-                                        borderWidth: 1 // ความหนาของเส้นขอบ
-                                    }
+                                show: true,
+                                fontSize: 20,
+                                fontWeight: 'bold',
+                                formatter: function(params) {
+                                    return `${params.name}\n${params.percent}%`;
+                                    // แสดงชื่อและอัตราร้อยละตรงกลาง
                                 },
-                                { 
-                                    value: data.project_al, 
-                                    name: "โครงการทั้งหมด",
-                                    
-                                    itemStyle: {
-                                        color: "#61a0a8",
-                                        borderColor: '#000', // สีเส้นขอบ
-                                        borderWidth: 1 // ความหนาของเส้นขอบ
-                                    }
+                                color: '#000' // ปรับสีข้อความให้ชัดเจน
+                            }
+                        },
+                        labelLine: {
+                            show: false
+                        },
+                        data: [{
+                                value: data.project,
+                                name: "ทำนุศิลปะและวัฒนธรรม",
+
+                                itemStyle: {
+                                    color: "#dd6b66",
+                                    borderColor: '#000', // สีเส้นขอบ
+                                    borderWidth: 1 // ความหนาของเส้นขอบ
                                 }
-                            ]
-                        }
-                    ]
+                            },
+                            {
+                                value: data.SumThumStd,
+                                name: "ทำนุการเรียน",
+
+                                itemStyle: {
+                                    color: "#759aa0",
+                                    borderColor: '#000', // สีเส้นขอบ
+                                    borderWidth: 1 // ความหนาของเส้นขอบ
+                                }
+                            },
+                            {
+                                value: data.SumThumRe,
+                                name: "ทำนุการวิจัย",
+
+                                itemStyle: {
+                                    color: "#ea7e53",
+                                    borderColor: '#000', // สีเส้นขอบ
+                                    borderWidth: 1 // ความหนาของเส้นขอบ
+                                }
+                            },
+                            {
+                                value: data.SumThumAll,
+                                name: "โครงการที่มีการทำนุศิลปะและวัฒนธรรมทั้งหมด",
+
+                                itemStyle: {
+                                    color: "#73b9bc",
+                                    borderColor: '#000', // สีเส้นขอบ
+                                    borderWidth: 1 // ความหนาของเส้นขอบ
+                                }
+                            },
+                            {
+                                value: data.project_al,
+                                name: "โครงการที่ไม่มีการทำนุศิลปะและวัฒนธรรม",
+
+                                itemStyle: {
+                                    color: "#eeeeee",
+                                    borderColor: '#000', // สีเส้นขอบ
+                                    borderWidth: 1 // ความหนาของเส้นขอบ
+                                }
+                            }
+                        ]
+                    }]
                 };
 
 
                 option && myChart.setOption(option);
 
                 myChart.on('click', function(params) {
-                // console.log('Clicked:', params);
+                    // console.log('Clicked:', params);
 
-                let selectedProjectIds;
+                    let selectedProjectIds;
 
-                if (params.name === "โครงการ") {
-                    selectedProjectIds = thumProjectIds;
-                } else if (params.name === "โครงการทั้งหมด") {
-                    selectedProjectIds = allProjectIds;
-                    // return;
-                }
-
-                // console.log('Selected project_id:', selectedProjectIds);
-
-                $.ajax({
-                    type: "POST",
-                    url: 'config/gen_Pro_thum.php',
-                    data: {
-                        pro_id: selectedProjectIds,
-                        year_pro: year
-                    },
-                    success: function(data) {
-                        $('.Header_main_nu').show();
-                        $('#So_pro').show();
-                        $('#So_pro').html(data);
-
-                        $('#dtBasicExample').DataTable({
-                            "lengthMenu": [
-                                [10, 10, 25, 50, 100],
-                                ["แสดงจำนวนข้อมูล", 10, 25, 50, 100]
-                            ],
-                            "pagingType": "simple_numbers",
-                            "language": {
-                                "searchPlaceholder": "ค้นหา",
-                                "lengthMenu": "_MENU_",
-                                "paginate": {
-                                    "first": "First",
-                                    "last": "Last",
-                                    "next": "&raquo;",
-                                    "previous": "&laquo;"
-                                },
-                                "info": "แสดงข้อมูลตั้งแต่ _START_ ถึง _END_ จาก _TOTAL_ รายการ ",
-                                "infoFiltered": "( โดยมีข้อมูลทั้งหมด _MAX_ รายการ )",
-                                "infoEmpty": "ไม่พบข้อมูลในตาราง",
-                                "emptyTable": "ไม่พบข้อมูลในตาราง",
-                                "zeroRecords": "ไม่พบข้อมูลในตาราง",
-                                "loadingRecords": "กำลังโหลด...",
-                                "processing": "กำลังประมวลผล",
-                                "search": ""
-                            },
-                            "drawCallback": function(settings) {
-                                $('[data-toggle="tooltip"]').tooltip();
-                            }
-                        });
+                    if (params.name === "ทำนุศิลปะและวัฒนธรรม") {
+                        selectedProjectIds = thumProjectIds;
+                    } else if (params.name === "ทำนุการเรียน") {
+                        selectedProjectIds = allProjectStd;
+                        // return;
+                    } else if (params.name === "ทำนุการวิจัย") {
+                        selectedProjectIds = allProjectRe;
+                        // return;
+                    } else if (params.name === "โครงการที่ไม่มีการทำนุศิลปะและวัฒนธรรม") {
+                        selectedProjectIds = allProjectIds;
+                        // return;
+                    } else if (params.name === "โครงการที่มีการทำนุศิลปะและวัฒนธรรมทั้งหมด") {
+                        selectedProjectIds = allProjectAll;
+                        // return;
                     }
+
+                    // console.log('Selected project_id:', selectedProjectIds);
+
+                    $.ajax({
+                        type: "POST",
+                        url: 'config/gen_Pro_thum.php',
+                        data: {
+                            pro_id: selectedProjectIds,
+                            year_pro: year
+                        },
+                        success: function(data) {
+                            $('.Header_main_nu').show();
+                            $('#So_pro').show();
+                            $('#So_pro').html(data);
+
+                            $('#dtBasicExample').DataTable({
+                                "lengthMenu": [
+                                    [10, 10, 25, 50, 100],
+                                    ["แสดงจำนวนข้อมูล", 10, 25, 50, 100]
+                                ],
+                                "pagingType": "simple_numbers",
+                                "language": {
+                                    "searchPlaceholder": "ค้นหา",
+                                    "lengthMenu": "_MENU_",
+                                    "paginate": {
+                                        "first": "First",
+                                        "last": "Last",
+                                        "next": "&raquo;",
+                                        "previous": "&laquo;"
+                                    },
+                                    "info": "แสดงข้อมูลตั้งแต่ _START_ ถึง _END_ จาก _TOTAL_ รายการ ",
+                                    "infoFiltered": "( โดยมีข้อมูลทั้งหมด _MAX_ รายการ )",
+                                    "infoEmpty": "ไม่พบข้อมูลในตาราง",
+                                    "emptyTable": "ไม่พบข้อมูลในตาราง",
+                                    "zeroRecords": "ไม่พบข้อมูลในตาราง",
+                                    "loadingRecords": "กำลังโหลด...",
+                                    "processing": "กำลังประมวลผล",
+                                    "search": ""
+                                },
+                                "drawCallback": function(settings) {
+                                    $('[data-toggle="tooltip"]').tooltip();
+                                }
+                            });
+                        }
+                    });
                 });
-            });
 
                 window.addEventListener('resize', function() {
                     myChart.resize();
                 });
             },
-			error: function(data) {
+            error: function(data) {
                 console.log(data);
-				Swal.close();
-				Swal.fire({
-					title: 'เกิดข้อผิดพลาด',
-					text: 'ไม่สามารถโหลดข้อมูลได้',
-					icon: 'error',
-					confirmButtonText: 'ตกลง'
-				});
-			}
-		});
-        
+                Swal.close();
+                Swal.fire({
+                    title: 'เกิดข้อผิดพลาด',
+                    text: 'ไม่สามารถโหลดข้อมูลได้',
+                    icon: 'error',
+                    confirmButtonText: 'ตกลง'
+                });
+            }
+        });
 
-        
+
+
     }
 </script>
