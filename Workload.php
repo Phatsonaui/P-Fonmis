@@ -1,168 +1,78 @@
-<div class="container-fluid pb-4">
-	<div class="row g-3 p-3">
-		<div class="col-md-4">
-			<div class="row">
-				<div class="col-md-12">
-					<h3>ภาระงาน</h3>
-				</div>
-				<div class="col-md-12">
-					<p>ข้อมูล ณ วันที่ <?php echo Datethai(date("Y-m-d"));?></p>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-4" style="display: none;">
-			<label for="project_Year" class="form-label"><strong>ปีการศึกษา</strong></label>
-	    <select id="project_Year" class="form-select" name="project_Year">
-	      <option selected disabled value="">เลือก</option>
-	      
-	      <option value="2023">2566</option>
-	      
-	    </select>
-		</div>
-		<div class="col-md-4">
-			<label for="project_Year" class="form-label"><strong>ปีงบประมาณ</strong></label>
-			<select class="form-select select-sm" name="year-section" id="year-section">
-			    <!-- สร้างตัวเลือกปีปัจจุบันและย้อนหลัง 5 ปี -->
-			    <?php
-			        $currentYear = date('Y');
-			        for ($i = 0; $i < 4; $i++) {
-			            $year = $currentYear - $i;
-			            $buddhistYear = $year + 543;
-			            $selected = ($i === 0) ? 'selected' : '';
-			            echo "<option value=\"$year\" $selected>$buddhistYear</option>";
-			        }
-			    ?>
+<div class="container mx-auto p-6">
+	<div class="flex flex-col md:flex-row md:justify-between items-center mb-6">
+		<h1 class="text-2xl font-semibold text-gray-800 mb-3 md:mb-0">ภาระงาน</h1>
+		<div class="flex items-center space-x-4">
+			<label class="text-gray-600 font-medium">ปีงบประมาณ:</label>
+			<select id="year-section" class="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+				<?php
+				$currentYear = date('Y');
+				for ($i = 0; $i < 4; $i++) {
+					$year = $currentYear - $i;
+					$buddhistYear = $year + 543;
+					$selected = ($i === 0) ? 'selected' : '';
+					echo "<option value=\"$year\" $selected>$buddhistYear</option>";
+				}
+				?>
 			</select>
 		</div>
 	</div>
-	<div class="row g-3">
-		<div class="col-md-12">
-			<div class="card">
-				<div class="card-body">
-					<div class="row g-3">
-						<div class="col-md-12">
-							<h2 class="card-title text-center">ภาระงานรวม</h2>	
-						</div>
-						<div class="col-md-12 p-5 text-center" id="result">
-							<!-- <a href="Page.php?feed=Cred"> -->
-								<h1 style="color: #EF6400;font-weight: 900;font-size: xxx-large;"></h1>
-							<!-- </a> -->
-						</div>
-						<div class="col-md-12">
-							<div class="row">
-							<div class="col-md-6 text-center" id="work_per" style="border-right: 2px solid black; padding-right: 0.3rem; ">
-								<h1 style="color: #008BEF;">ภาระงานเฉลี่ยต่อคน</h1>
-								<h2 class="p-5"> </h2>	
-							</div>
-							<div class="col-md-6 text-center" id="work_over">
-								<h1 style="color: #0500FA;">ประมาณค่าสอนเกิน</h1>
-								<h2 class="p-5"> XXX,XXX บาท</h2>	
-							</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+
+	<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+		<!-- ภาระงานรวม -->
+		<div class="bg-white rounded-2xl shadow-md p-6 flex flex-col items-center">
+			<span class="text-gray-500 font-medium mb-2">ภาระงานรวม</span>
+			<span id="total_unit" class="text-4xl font-extrabold text-gray-900">-</span>
 		</div>
-		<div class="col-md-12" style="display: none;">
-			<a href="Page.php?feed=Stand">
-			<div class="card">
-				<div class="card-body">
-					<div class="row g-3">
-						<div class="col-md-12">
-							<h2 class="card-title text-center">ภาระงานเป็นไปตามมาตราฐานภาระงาน</h2>	
-						</div>
-						<div class="col-md-12 p-5 text-center" >
-							<h1 style="color: #077312;font-weight: 900;font-size: xxx-large;">XX คน</h1>
-						</div>
-					</div>
-				</div>
-			</div>
-			</a>
+
+		<!-- ภาระงานเฉลี่ยต่อคน -->
+		<div class="bg-white rounded-2xl shadow-md p-6 flex flex-col items-center">
+			<span class="text-gray-500 font-medium mb-2">ภาระงานเฉลี่ยต่อคน</span>
+			<span id="work_per" class="text-4xl font-extrabold text-blue-500">-</span>
 		</div>
-		<div class="col-md-6" style="display: none;">
-			<a href="Page.php?feed=Stand">
-			<div class="card">
-				<div class="card-body">
-					<div class="row g-3">
-						<div class="col-md-12">
-							<h2 class="card-title text-center">สูงกว่ามาตราฐาน</h2>	
-						</div>
-						<div class="col-md-12 p-5 text-center" >
-							<h1 style="color: #F70000;font-weight: 900;font-size: xxx-large;">XX คน</h1>
-						</div>
-					</div>
-				</div>
-			</div>
-			</a>
+
+		<!-- ประมาณค่าสอนเกิน -->
+		<div class="bg-white rounded-2xl shadow-md p-6 flex flex-col items-center">
+			<span class="text-gray-500 font-medium mb-2">ประมาณค่าสอนเกิน</span>
+			<span id="work_over" class="text-4xl font-extrabold text-indigo-500">-</span>
 		</div>
-		<div class="col-md-6" style="display: none;">
-			<a href="Page.php?feed=Stand">
-			<div class="card">
-				<div class="card-body">
-					<div class="row g-3">
-						<div class="col-md-12">
-							<h2 class="card-title text-center">ต่ำกว่ามาตราฐาน</h2>	
-						</div>
-						<div class="col-md-12 p-5 text-center" >
-							<h1 style="color: #827507;font-weight: 900;font-size: xxx-large;">XX คน</h1>
-						</div>
-					</div>
-				</div>
-			</div>
-			</a>
-		</div>
-	</div>	<!-- row g-3 -->
-</div>	<!-- contaniner -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	</div>
+</div>
+
 <script>
-	// JavaScript
 	$(document).ready(function() {
-		$('#year-section').change(function() {
-			var selectedYear = $(this).val();
-			if (selectedYear !== '') {
-				fetchData(selectedYear);
-			} else {
-				$('#result h1').empty();
-			}
-		});
-
 		function fetchData(year) {
+			// console.log("Fetching data for year:", year);
 			$.ajax({
-				url: 'config/get_data_work.php', // เปลี่ยนเป็น URL ที่จะรับข้อมูลจากเซิร์ฟเวอร์
-				method: 'POST',
+				type: "POST",
+				url: 'config/get_data_work.php',
 				data: {
 					year: year
 				},
 				success: function(data) {
-					$('#result h1').text(data);
-				}
-			});
-
-			$.ajax({
-				url: 'config/get_data_work_per.php', // เปลี่ยนเป็น URL ที่จะรับข้อมูลจากเซิร์ฟเวอร์
-				method: 'POST',
-				data: {
-					year: year
+					// console.log("Raw response:", data);
+					try {
+						if (typeof data === 'string') {
+							data = JSON.parse(data);
+						}
+						$('#total_unit').text(data.total_unit);
+						$('#work_per').text(data.work_per);
+						$('#work_over').text(data.work_over);
+					} catch (e) {
+						console.error("JSON Parse Error:", e);
+						console.log("Response:", data);
+					}
 				},
-				success: function(data) {
-					$('#work_per h2').text(data);
-				}
-			});
-
-			$.ajax({
-				url: 'config/get_data_work_over.php', // เปลี่ยนเป็น URL ที่จะรับข้อมูลจากเซิร์ฟเวอร์
-				method: 'POST',
-				data: {
-					year: year
-				},
-				success: function(data) {
-					$('#work_over h2').text(data);
+				error: function(xhr, status, error) {
+					console.error("AJAX Error:", error);
 				}
 			});
 		}
 
-		var initialYear = new Date().getFullYear().toString();
-		fetchData(initialYear);
+		$('#year-section').change(function() {
+			// console.log($(this).val());
+			fetchData($(this).val());
+		});
+
+		fetchData(new Date().getFullYear());
 	});
 </script>
