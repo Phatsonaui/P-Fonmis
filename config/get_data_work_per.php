@@ -1,35 +1,65 @@
 <?php
-include_once("../function/fun_verify.php");
-if (isUserVerified_fon()) {
-  // รับค่าปีที่ส่งมาผ่าน POST
-  include("../../class/class.db.php");
+include("../../class/class.db.php");
+require_once("../class/chgdatethai.php");
 
-  $selectedYear = isset($_POST['year']) ? $_POST['year'] : '2023';;
+$deviceIDs  = isset($_POST['devices']) ? $_POST['devices'] : "-";
+$idList = implode("','", array_map('addslashes', $deviceIDs));
+$col_name = "";
+$condition = "";
+$date_device = "";
 
-  // ดำเนินการดึงข้อมูลหรือประมวลผลตามต้องการ
-  // ตัวอย่างเท่านี้จะนับจำนวนเรื่องทั้งหมดในปีที่เลือก
-  $work = 0;
-  $total_over = 0;
+$col_name = "วันที่รับสินค้า";
+$condition = "WHERE device_ID IN ('$idList') ORDER BY device_ID ASC";
 
-  $db1 = new Database('nurse');
-  $db1->Table = "WL_LimitUnit";
-  $db1->Where = "LEFT JOIN user_data ON WL_LimitUnit.user_id = user_data.ud_id where WL_LimitUnit.fiscal_year='$selectedYear' group by WL_LimitUnit.user_id";
-  $user1 = $db1->Select();
-  $sumpeple = count($user1);
+?>
+<div class="col-md-12">
+  <table class="table" id="dataType">
+    <thead class="Table_header_nu">
+      <tr>
+        <th>#</th>
+        <th>เลขครุภัณฑ์</th>
+        <th width="60%">ชื่อครุภัณฑ์</th>
+        <th width="15%">
+          <?php
+          echo $col_name;
+          ?>
+        </th>
+      </tr>
+    </thead>
+    <tbody class="Table_body_nu">
+      <?php
+      $drow = 0;
+      $db3 = new Database('nurse');
+      $db3->Table = "DV_Data";
+      $db3->Where = "$condition";
+      $user3 = $db3->Select();
+      foreach ($user3 as $values3 => $data3) {
+        $drow++; ?>
+        <tr>
+          <td class="text-center"><?php echo $drow; ?></td>
+          <?php
+          if ($data3['device_Number'] == "") {
+            echo "<td class='text-center'>-</td>";
+          } else { ?>
+            <td><?php echo $data3['device_Number']; ?></td>
+          <?php } ?>
+          <td><span><?php echo $data3['device_Name']; ?></span></td>
 
+          <td>
+            <?php
+            $date_device =  DateThai($data3['device_DateInput']);
 
-  $db3 = new Database('nurse');
-  $db3->Table = "WL_fiscalYear";
-  $db3->Where = "where fiscal_year='$selectedYear' order by fiscal_year";
-  $user3 = $db3->Select();
-  foreach ($user3 as $values3 => $data3) {
-    $total_over = $data3['fiscal_unit'];
-  }
-  $number_without_comma = (float) str_replace(",", "", $total_over);
-  $work = $number_without_comma / $sumpeple;
+            if ($date_device == "") {
+              echo "-";
+            } else {
+              echo $date_device;
+            }
+            ?>
+          </td>
+        </tr>
+      <?php
+      } ?>
 
-
-  echo number_format($work, 2) . " หน่วยกิต";
-} else {
-  echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"2;URL=ctrl_logout.php\">";
-}
+    </tbody>
+  </table>
+</div>
