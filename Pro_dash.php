@@ -474,11 +474,23 @@ https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js
                                         </div>
                                         <h1 class="card-title">
                                             <?php
+                                            $nouse_re = 0;
                                             $dbnouse = new Database('nurse');
                                             $dbnouse->Table = "proj_list";
                                             $dbnouse->Where = "where project_Year ='$projyear' AND (project_status ='06' ) order by project_id";
                                             $usernouse = $dbnouse->Select();
-                                            $nouse_re = count($usernouse);
+                                            foreach ($usernouse as $values6 => $data6) {
+                                                $dbDat = new Database('nurse');
+                                                $dbDat->Table = "proj_date";
+                                                $dbDat->Where = "where project_id='$data6[project_id]' order by prodate_id DESC limit 1";
+                                                $userDat = $dbDat->Select();
+                                                foreach ($userDat as $valuesDat => $dataDat) {
+                                                    $last_date = $dataDat['prodate_end'];
+                                                }
+                                                if (strtotime($last_date) < strtotime(date("Y-m-d"))) {
+                                                    $nouse_re++;
+                                                }
+                                            }
                                             echo "<script> var nouse_re = $nouse_re; </script>" . $nouse_re;
                                             $nouse_rePercent = ($nouse_re / $SumProject) * 100;
                                             ?>

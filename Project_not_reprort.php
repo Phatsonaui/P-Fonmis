@@ -130,6 +130,7 @@ function calculateDateDifferenceDetailed($startDate, $endDate = null)
                     <th width="10%">เลขที่รับ</th>
                     <th width="30%">ชื่อโปรเจค</th>
                     <th width="15%">ระยะวัน</th>
+                    <th width="15%">วันสิ้นสุดโครงการ</th>
                     <th width="15%">รายชื่อ</th>
                 </tr>
             </thead>
@@ -143,6 +144,7 @@ function calculateDateDifferenceDetailed($startDate, $endDate = null)
                 $db6->Where = "where project_Year = '$_GET[year_a]' AND project_status IN ('06') order by project_dateofyear ASC";
                 $user6 = $db6->Select();
                 foreach ($user6 as $values6 => $data6) {
+
                     $dbGrpabo = new Database('nurse');
                     $dbGrpabo->Table = "proj_comment";
                     $dbGrpabo->Where = "where project_id = '$data6[project_id]' ANd comm_part = '5' AND comm_status = '3'";
@@ -150,72 +152,84 @@ function calculateDateDifferenceDetailed($startDate, $endDate = null)
                     foreach ($userGrpabo as $valuesGrpabo => $dataGrpabo) {
                         $apporve_date = $dataGrpabo['comm_date'];
                     }
-                    $r++; ?>
+                    $Dat = 0;
+                    $dbDat = new Database('nurse');
+                    $dbDat->Table = "proj_date";
+                    $dbDat->Where = "where project_id='$data6[project_id]' order by prodate_id DESC limit 1";
+                    $userDat = $dbDat->Select();
+                    foreach ($userDat as $valuesDat => $dataDat) {
+                        $last_date = $dataDat['prodate_end'];
+                    }
+                    if (strtotime($last_date) < strtotime(date("Y-m-d"))) {
+                        $r++; ?>
 
-                    <tr>
-                        <td class="text-center"><?php echo $r; ?></td>
-                        <?php
-                        if ($data6['project_ReceiptNo'] == "") {
-                            echo "<td class='text-center'>-</td>";
-                        } else {
-                            $year_r = strtotime($data6['project_ReceiptDate']);
-                            $year_re = date('Y', $year_r) + 543; ?>
-                            <td><?php echo $data6['project_ReceiptNo'] . "/" . $year_re; ?></td>
-                        <?php } ?>
-                        <td><span class="d-inline-block text-truncate" style="max-width: 350px;">
-                                <?php echo $data6['project_name']; ?>
-                            </span><br>
-                            <span style="font-size: 10px;" class="text-secondary">
-                                <?php echo "สร้างเมื่อ : " . DateThai($data6['project_dateofyear']) ?>
-                            </span>
-                        </td>
-                        <td>
-                            <!-- คำนวนว่ากี่วันกี่เดือนกี่ปีตั้งแต่วันที่อนุมัติโครงการจนถึงปัจจุบัน -->
+                        <tr>
+                            <td class="text-center"><?php echo $r; ?></td>
                             <?php
-                            echo calculateDateDifferenceDetailed($apporve_date, $endDate = null);
-                            ?>
-                        </td>
+                            if ($data6['project_ReceiptNo'] == "") {
+                                echo "<td class='text-center'>-</td>";
+                            } else {
+                                $year_r = strtotime($data6['project_ReceiptDate']);
+                                $year_re = date('Y', $year_r) + 543; ?>
+                                <td><?php echo $data6['project_ReceiptNo'] . "/" . $year_re; ?></td>
+                            <?php } ?>
+                            <td><span class="d-inline-block text-truncate" style="max-width: 350px;">
+                                    <?php echo $data6['project_name']; ?>
+                                </span><br>
+                                <span style="font-size: 10px;" class="text-secondary no-export">
+                                    <?php echo "สร้างเมื่อ : " . DateThai($data6['project_dateofyear']) ?>
+                                </span>
+                            </td>
+                            <td>
+                                <?php
+                                echo calculateDateDifferenceDetailed($last_date, $endDate = null);
+                                ?>
+                            </td>
+                            <td>
+                                <?php
+                                echo DateThai($last_date);
+                                ?>
+                            </td>
+                            <td style="font-size: 10px;">
+                                <?php
+                                $manager = 0;
+                                $dbGrp12 = new Database('nurse');
+                                $dbGrp12->Table = "proj_userProject";
+                                $dbGrp12->Where = "where project_id = '$data6[project_id]' AND (userProj_status = '1' OR userProj_status = '2') ORDER BY userProj_status DESC";
+                                $userGrp12 = $dbGrp12->Select();
+                                foreach ($userGrp12 as $valuesGrp12 => $dataGrp12) {
+                                    $dbGrp2 = new Database('nurse');
+                                    $dbGrp2->Table = "user_data";
+                                    $dbGrp2->Where = "where ud_id='$dataGrp12[ud_id]' ";
+                                    $userGrp2 = $dbGrp2->Select();
+                                    foreach ($userGrp2 as $valuesGrp2 => $dataGrp2) {
+                                        $dbtitle11 = new Database('nurse');
+                                        $dbtitle11->Table = "front_title";
+                                        $dbtitle11->Where = "where front_id='$dataGrp2[title]'";
+                                        $usertitle11 = $dbtitle11->Select();
+                                        foreach ($usertitle11 as $valuestitle11 => $datatitle11) {
+                                            if ($dataGrp12['userProj_status'] == 2 && $_SESSION['ud_id_MGProject'] == $dataGrp12['ud_id']) {
+                                                $manager = 1;
+                                            }
 
-                        <td style="font-size: 10px;">
-                            <?php
-                            $manager = 0;
-                            $dbGrp12 = new Database('nurse');
-                            $dbGrp12->Table = "proj_userProject";
-                            $dbGrp12->Where = "where project_id = '$data6[project_id]' AND (userProj_status = '1' OR userProj_status = '2') ORDER BY userProj_status DESC";
-                            $userGrp12 = $dbGrp12->Select();
-                            foreach ($userGrp12 as $valuesGrp12 => $dataGrp12) {
-                                $dbGrp2 = new Database('nurse');
-                                $dbGrp2->Table = "user_data";
-                                $dbGrp2->Where = "where ud_id='$dataGrp12[ud_id]' ";
-                                $userGrp2 = $dbGrp2->Select();
-                                foreach ($userGrp2 as $valuesGrp2 => $dataGrp2) {
-                                    $dbtitle11 = new Database('nurse');
-                                    $dbtitle11->Table = "front_title";
-                                    $dbtitle11->Where = "where front_id='$dataGrp2[title]'";
-                                    $usertitle11 = $dbtitle11->Select();
-                                    foreach ($usertitle11 as $valuestitle11 => $datatitle11) {
-                                        if ($dataGrp12['userProj_status'] == 2) {
-                                            $manager = 1;
-                                        }
+                                            switch ($dataGrp12['userProj_status']) {
+                                                case '1':
+                                                    echo '<span class="no-export">' . $dataGrp2['name_th'] . " " . $dataGrp2['lname_th'] . " : ผู้จัดทำ<br></span>";
+                                                    break;
 
-                                        switch ($dataGrp12['userProj_status']) {
-                                            case '1':
-                                                echo $dataGrp2['name_th'] . " " . $dataGrp2['lname_th'] . " : ผู้จัดทำโครงการ<br>";
-                                                break;
+                                                case '2':
+                                                    echo $dataGrp2['name_th'] . " " . $dataGrp2['lname_th'] . " : ประธาน<br>";
 
-                                            case '2':
-                                                echo $dataGrp2['name_th'] . " " . $dataGrp2['lname_th'] . " : ประธาน<br>";
-
-                                                break;
+                                                    break;
+                                            }
                                         }
                                     }
-                                }
-                            } ?>
-                        </td>
-                    </tr>
-
-
-                <?php } ?>
+                                } ?>
+                            </td>
+                        </tr>
+                <?php } else {
+                    }
+                } ?>
             </tbody>
         </table>
     </div>
